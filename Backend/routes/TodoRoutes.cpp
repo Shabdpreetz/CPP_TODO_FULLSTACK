@@ -5,7 +5,7 @@
 #undef DELETE
 #endif
 
-void registerTodoRoutes(crow::SimpleApp& app)
+void registerTodoRoutes(crow::App<crow::CORSHandler>& app)
 {
     // GET ALL
     CROW_ROUTE(app, "/todos")

@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: #0b0f19;
+  --color-surface: #10162a;
+  --color-violet: #7c6fff;
+  --color-cyan: #5eead4;
+  --color-coral: #f472b6;
+  --color-ink: #f5f6fa;
+  --color-muted: #98a2b8;
+
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+/* Wrapped in @layer components so Tailwind's utilities layer (loaded after
+   components) can still override things like `position` or `overflow` when a
+   className combines one of these with a Tailwind utility — e.g. `glass
+   absolute`. Unlayered rules would otherwise always win regardless of class
+   order, which silently broke position:absolute on the sort dropdown. */
+@layer components {
+  /* Frosted glass panel: thin white wash so the blurred color behind it stays vivid */
+  .glass {
+    position: relative;
+    background: linear-gradient(
+      165deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.02)
+    );
+    backdrop-filter: blur(26px) saturate(180%);
+    -webkit-backdrop-filter: blur(26px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+      0 24px 60px -20px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  /* Enhanced only where the browser actually accepts an SVG filter in backdrop-filter */
+  :root.supports-glass-distortion .glass {
+    backdrop-filter: url(#liquid-glass-distortion) blur(18px) saturate(190%);
+    -webkit-backdrop-filter: url(#liquid-glass-distortion) blur(18px) saturate(190%);
+  }
+
+  /* Cursor-tracked specular highlight — the glass "catches" light where you point */
+  .glass-shine {
+    background: radial-gradient(
+      circle at var(--shine-x, 20%) var(--shine-y, 0%),
+      rgba(255, 255, 255, 0.22),
+      transparent 45%
+    );
+    mix-blend-mode: overlay;
+    transition: background 0.2s ease-out;
+  }
+
+  /* Text sits on top of shifting color, so it gets its own fixed contrast
+     boost independent of whatever hue is drifting behind the glass. */
+  .text-ink,
+  .text-muted {
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Scrolls past 5 tasks, but stays hidden so it doesn't break the glass look */
+  .todo-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .todo-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ripple-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 1.5px solid var(--color-violet);
+    transform-origin: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
