@@ -49,9 +49,18 @@ target_compile_options(TodoBackend PRIVATE
 # ===================================
 # Link Libraries
 # ===================================
+# ===================================
+# Link Libraries
+# ===================================
 target_link_libraries(TodoBackend PRIVATE
     Crow::Crow
     ${LIBPQXX_LIBRARIES}
-    ws2_32
-    mswsock
 )
+
+# Windows-only networking libraries
+if(WIN32)
+    target_link_libraries(TodoBackend PRIVATE
+        ws2_32
+        mswsock
+    )
+endif()
