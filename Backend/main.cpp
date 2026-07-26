@@ -58,7 +58,7 @@ int main()
     auto& cors = app.get_middleware<crow::CORSHandler>();
     cors
         .global()
-        .origin("http://localhost:3000")
+        .origin("https://ripple-todo.vercel.app")
         .methods("GET"_method, "POST"_method, "PUT"_method, "DELETE"_method, "PATCH"_method, "OPTIONS"_method)
         .headers("Content-Type")
         .max_age(3600);
