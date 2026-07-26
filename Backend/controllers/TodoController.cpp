@@ -8,6 +8,7 @@ crow::response TodoController::getAllTodos()
 {
     try
     {
+        std::lock_guard<std::mutex> dbLock(Database::getMutex());
         auto conn = Database::getConnection();
 
         pqxx::work tx(*conn);
@@ -62,6 +63,7 @@ crow::response TodoController::createTodo(const crow::request& req)
 
         std::string title = body["title"].s();
 
+        std::lock_guard<std::mutex> dbLock(Database::getMutex());
         auto conn = Database::getConnection();
 
         // Create transaction (YOU WERE MISSING THIS)
@@ -100,6 +102,7 @@ crow::response TodoController::getTodoById(int id)
 {
     try
     {
+        std::lock_guard<std::mutex> dbLock(Database::getMutex());
         auto conn = Database::getConnection();
 
         pqxx::work tx(*conn);
@@ -153,6 +156,7 @@ crow::response TodoController::updateTodo(
 
         std::string title = body["title"].s();
 
+        std::lock_guard<std::mutex> dbLock(Database::getMutex());
         auto conn = Database::getConnection();
 
         pqxx::work tx(*conn);
@@ -195,6 +199,7 @@ crow::response TodoController::deleteTodo(int id)
 {
     try
     {
+        std::lock_guard<std::mutex> dbLock(Database::getMutex());
         auto conn = Database::getConnection();
 
         pqxx::work tx(*conn);
@@ -229,6 +234,7 @@ crow::response TodoController::toggleTodo(int id)
 {
     try
     {
+        std::lock_guard<std::mutex> dbLock(Database::getMutex());
         auto conn = Database::getConnection();
 
         pqxx::work tx(*conn);

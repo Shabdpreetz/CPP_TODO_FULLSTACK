@@ -1,6 +1,7 @@
 #include <crow.h>
 #include <iostream>
 
+#include "crow/middlewares/cors.h"
 #include "env.h"
 #include "database/Database.h"
 #include "routes/TodoRoutes.h"
@@ -51,7 +52,16 @@ int main()
     // =========================
     // Crow Web Server
     // =========================
-    crow::SimpleApp app;
+    crow::App<crow::CORSHandler> app;
+
+    // Allow the Next.js dev server to call this API from the browser
+    auto& cors = app.get_middleware<crow::CORSHandler>();
+    cors
+        .global()
+        .origin("http://localhost:3000")
+        .methods("GET"_method, "POST"_method, "PUT"_method, "DELETE"_method, "PATCH"_method, "OPTIONS"_method)
+        .headers("Content-Type")
+        .max_age(3600);
 
     // Home Route
     CROW_ROUTE(app, "/")([]()
