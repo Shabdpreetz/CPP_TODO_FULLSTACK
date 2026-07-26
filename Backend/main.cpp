@@ -54,12 +54,19 @@ int main()
     // =========================
     crow::App<crow::CORSHandler> app;
 
-    // Allow the Next.js dev server to call this API from the browser
+    // Allow the frontend (local dev + deployed) to call this API from the browser.
+    // Crow's CORSRules::origin() only stores a single string (see cors.h — it's
+    // a straight overwrite, not a list: "TODO: support multiple origins that are
+    // dynamically selected"), so chaining .origin(a).origin(b) just leaves
+    // whichever call was made last, silently dropping the other origin. Since
+    // this API doesn't use cookies/credentials, allowing "*" is the correct fix
+    // here rather than trying to fake a multi-origin allowlist with a single
+    // string field — it works for localhost, the deployed Vercel URL, and any
+    // future preview-deployment URL without needing another redeploy.
     auto& cors = app.get_middleware<crow::CORSHandler>();
     cors
     .global()
-    .origin("http://localhost:3000")
-    .origin("https://ripple-todo.vercel.app")
+    .origin("*")
     .methods("GET"_method, "POST"_method, "PUT"_method, "DELETE"_method, "PATCH"_method, "OPTIONS"_method)
     .headers("Content-Type")
     .max_age(3600);
