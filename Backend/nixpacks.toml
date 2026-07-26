@@ -1,0 +1,9 @@
+[phases.setup]
+nixPkgs = [
+  "cmake",
+  "gcc",
+  "ninja",
+  "pkg-config",
+  "postgresql",
+  "libpqxx"
+]

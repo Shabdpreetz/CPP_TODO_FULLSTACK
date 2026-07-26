@@ -74,10 +74,22 @@ int main()
 
     cout << "===================================" << endl;
     cout << "🚀 Server Started Successfully" << endl;
-    cout << "🌐 http://localhost:18080" << endl;
+    cout << "🌐 http://localhost:18080 || Railway port" << endl;
     cout << "===================================" << endl;
 
-    app.port(18080).multithreaded().run();
+    // app.port(18080).multithreaded().run();
+
+
+    int port = 18080;
+
+    const char* railwayPort = std::getenv("PORT");
+
+    if (railwayPort)
+    {
+        port = std::stoi(railwayPort);
+    }
+
+    app.port(port).multithreaded().run();
 
     return 0;
 }
