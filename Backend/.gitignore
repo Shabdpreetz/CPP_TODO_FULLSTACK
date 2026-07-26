@@ -1,0 +1,34 @@
+# Build folders
+build/
+Backend/build/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+Makefile
+
+# Ninja
+.ninja_deps
+.ninja_log
+build.ninja
+
+# FetchContent dependencies
+_deps/
+
+# Executables
+*.exe
+*.dll
+*.a
+*.lib
+*.obj
+
+# VS Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# Environment files
+.env
