@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <unordered_map>
+#include <cstdlib>   // for std::getenv
 
 class Env {
 public:
@@ -11,8 +12,9 @@ public:
     static bool load(const std::string& filename = ".env") {
         std::ifstream file(filename);
 
+        // No .env file? That's fine in production — real env vars will be used instead.
         if (!file.is_open())
-            return false;
+            return true;
 
         std::string line;
 
@@ -38,6 +40,11 @@ public:
     static std::string get(const std::string& key) {
         if (vars.find(key) != vars.end())
             return vars[key];
+
+        // Fall back to a real environment variable (e.g. set in Railway's dashboard)
+        const char* envVal = std::getenv(key.c_str());
+        if (envVal)
+            return std::string(envVal);
 
         return "";
     }
